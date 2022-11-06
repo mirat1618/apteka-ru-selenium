@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk 'openjdk-11'
+        maven 'Maven 3.5.8'
+    }
+
+    parameters {
+        string(
+            name: 'CUCUMBER_FILTER_TAGS_OPTIONS'
+            description: 'Cucumber filter tags'
+            defaultValue: '-Dcucumber.filter.tags=@Search or @Sum'
+        )
+    }
+
+    stages {
+        stage("Clone") {
+            steps {
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: "*/master"]],
+                    extensions: [[
+                        $class: 'CloneOption',
+                        shallow: true,
+                        depth: 1,
+                        timeout: 30,
+                    ]],
+                    userRemoteConfigs: [[
+                    url: 'https://github.com/mirat1618/apteka-ru-selenium.git'
+                    ]]
+
+                ])
+            }
+        }
+
+        stage("Test") {
+            steps {
+                sh "mvn -Dtest="ui.**" clean test"
+            }
+        }
+
+        stage("Report") {
+            steps {
+                junit '**/surefire-reports/*.xml'
+                cucumber buildStatus: 'null', customCssFiles: '', customJsFiles: '', failedFeaturesNumber: -1, failedScenariosNumber: -1, failedStepsNumber: -1, fileIncludePattern: 'target/report.json', pendingStepsNumber: -1, skippedStepsNumber: -1, sortingMethod: 'ALPHABETICAL', undefinedStepsNumber: -1
+            }
+        }
+    }
+}
