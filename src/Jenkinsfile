@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     tools {
-        jdk 'openjdk-11'
-        maven 'Maven 3.5.8'
+        jdk 'adopt_jdk_11'
+        maven 'maven'
     }
 
     parameters {
         string(
-            name: 'CUCUMBER_FILTER_TAGS_OPTIONS'
-            description: 'Cucumber filter tags'
+            name: 'CUCUMBER_FILTER_TAGS_OPTIONS',
+            description: 'Cucumber filter tags',
             defaultValue: '-Dcucumber.filter.tags=@Search or @Sum'
         )
     }
@@ -36,14 +36,14 @@ pipeline {
 
         stage("Test") {
             steps {
-                sh "mvn -Dtest="ui.**" clean test"
+                sh 'mvn -Dtest="ui.**" -Dheadless=true clean test'
             }
         }
 
         stage("Report") {
             steps {
                 junit '**/surefire-reports/*.xml'
-                cucumber buildStatus: 'null', customCssFiles: '', customJsFiles: '', failedFeaturesNumber: -1, failedScenariosNumber: -1, failedStepsNumber: -1, fileIncludePattern: 'target/report.json', pendingStepsNumber: -1, skippedStepsNumber: -1, sortingMethod: 'ALPHABETICAL', undefinedStepsNumber: -1
+                cucumber buildStatus: 'null', customCssFiles: '', customJsFiles: '', failedFeaturesNumber: -1, failedScenariosNumber: -1, failedStepsNumber: -1, fileIncludePattern: 'target/cucumber/report.json', pendingStepsNumber: -1, skippedStepsNumber: -1, sortingMethod: 'ALPHABETICAL', undefinedStepsNumber: -1
             }
         }
     }
