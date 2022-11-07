@@ -1,12 +1,10 @@
 package ui;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeDriverLogLevel;
-import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+/* Вспомогательный класс для загрузки и получения инстанса драйвера браузера */
 public class WebDriverInstaller {
     private static ChromeOptions chromeOptions = new ChromeOptions();
 
@@ -22,9 +20,8 @@ public class WebDriverInstaller {
            chromeOptions.addArguments("--headless");
     }
 
-    public static ChromeDriver getChromeDriver() {
+    public static ChromeDriver getChromeDriver() { // Получение инстанса драйвера
         ChromeDriver driver = new ChromeDriver(chromeOptions);
-
         return driver;
     }
 }

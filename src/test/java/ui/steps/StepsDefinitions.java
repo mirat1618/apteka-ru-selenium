@@ -1,8 +1,8 @@
 package ui.steps;
 
-import io.cucumber.java.Scenario;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -11,7 +11,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import ui.WebDriverInstaller;
-import ui.helper.Memory;
+import ui.helper.StashMemory;
 import ui.pages.CartPage;
 import ui.pages.MainPage;
 import ui.pages.SearchResultsPage;
@@ -19,7 +19,6 @@ import ui.pages.common.Header;
 import ui.pages.common.Modals;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
 
@@ -45,7 +44,7 @@ public class StepsDefinitions {
 
     @After
     public void tearDown(Scenario scenario) {
-        if(scenario.isFailed()) {
+        if(scenario.isFailed()) { // Если шаг не выполнен -- скриншот экрана
             byte[] data = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
             scenario.attach(data, "image/png", scenario.getName());
         }
@@ -82,6 +81,6 @@ public class StepsDefinitions {
 
     @And("Значение поля Итого в корзине равно суммированной цене")
     public void total_price_matches_total_summed_price() {
-        assertTrue(Memory.getCurrentCardTotalPrice().equals(cartPage.getTotalPrice()));
+        assertTrue(StashMemory.getCurrentCardTotalPrice().equals(cartPage.getTotalPrice()));
     }
 }
