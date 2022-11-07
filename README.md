@@ -1,5 +1,5 @@
-![allure1](allure1.png "Allure1")
-![allure2](allure2.png "Allure2")
+![report1](report1.png "report1")
+![report2](report2.png "report2")
 * Скриншот в случае падения:
 
-![allure2](allure3.png "Allure3")
+![report3](report3.png "report3")
